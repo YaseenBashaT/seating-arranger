@@ -27,4 +27,4 @@ def getbranches():
     return jsonify(branches = [x for x in branches])
 
 
-app.run(port = 12435)
+app.run(port = 12435, host='0.0.0.0')
