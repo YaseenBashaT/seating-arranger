@@ -1,0 +1,49 @@
+
+nav{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 150px;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 1);
+}
+#root{
+  margin-left: 150px;
+  padding-left: 24px;
+  background-color: rgb(255, 255, 255);
+  max-width: 75%;
+}
+nav ul {
+  list-style-type: none;
+  padding: 12px;
+}
+nav ul li{
+  padding: 4px;
+}
+
+
+a{
+  text-decoration: none;
+}
+
+td{
+  min-width: 40px;
+  max-width: 100px;
+}
+
+table, th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td{
+  padding: 14px 24px;
+  width: 250px;
+}
+
+tbody tr:nth-child(even){
+  background-color: rgb(220, 220, 220);
+}
+thead tr{
+  background-color: #444;
+  color: #eee;
+}
