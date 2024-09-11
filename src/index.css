@@ -31,6 +31,9 @@ td{
   max-width: 100px;
 }
 
+table{
+  margin-top: 25px;
+}
 table, th, td{
   border: 1px solid black;
   border-collapse: collapse;
@@ -46,4 +49,16 @@ tbody tr:nth-child(even){
 thead tr{
   background-color: #444;
   color: #eee;
+}
+
+form#formInsertRooms{
+  padding: 20px;
+  border: #444;
+  background-color: #3e3e3e;
+  /* display: flex; */
+  /* justify-content: space-around; */
+}
+form#formInsertRooms input{
+  margin: 0px 10px;
+  min-width: 40px;
 }

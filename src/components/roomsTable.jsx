@@ -4,27 +4,71 @@ import { json } from "react-router-dom"
 export default function Roomstable(){
     const [roomList, setRoomList] = useState([])
 
-    const url = "https://ap-south-1.aws.data.mongodb-api.com/app/data-opccxbo/endpoint/data/v1/action/findOne"
+    const url = "http://127.0.0.1:12435"
     useEffect(()=>{ 
-        
-        fetch('http://127.0.0.1:8080/getrooms')
+        fetch(`${url}/getrooms`)
         .then(response=> {return response.json()})
-        .then(data=> {setRoomList(data.response)})
+        .then(data=> {console.log(data);setRoomList(data.response)})
         .catch(reason=>{console.log(reason)})
     },[])
 
     function handleInsert(room){
-        setRoomList((item)=> { roomList+item });
+        fetch(`${url}/getrooms`,{
+            method:"POST",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(room)})
+        .then((resp)=>{ return resp.json()})
+        .then((data)=>{setRoomList(prev=>[...prev, data.response]);});
+        
     }
     function handleDeleteRow(id){
-        setRoomList(item => item.filter(room => id !== room.id))
+        let conf = confirm("delete the row")
+        if (conf){
+            fetch(`${url}/getrooms/${id}`, {method:'DELETE'})
+            .then(resp => {return resp.json})
+            .then((data) => console.log(data.response))
+            setRoomList(item => item.filter(room => id !== room._id))
+        }
     }
-    function handledummy(id){
-        console.log(id)
-    }
+
     return <>
+    <InsertRowForm handleInsert={handleInsert} />
     <Table roomList={roomList} handleDeleteRow={handleDeleteRow} />
     </>
+}
+
+const InsertRowForm = ({handleInsert})=>{
+    const [form, setform] = useState({rno:'', rows:'', columns:'', strength:''})
+    const handlesubmit = (e)=>{
+        e.preventDefault();
+        if (form.rno != "" && form.rows >1 && form.columns >1 && form.strength >0)
+        handleInsert(form);
+        else
+        alert("check the room details")
+
+    }
+    const handlerno = (e)=>{
+        setform(prev=> ({...prev, rno: e.target.value}))
+    }
+    const handlerow = (e)=>{
+        setform(prev=> ({...prev, rows: e.target.value}))
+    }
+    const handlecolumn = (e)=>{
+        setform(prev=> ({...prev, columns: e.target.value}))
+    }
+    const handlestrength = (e)=>{
+        setform(prev=> ({...prev, strength: e.target.value}))
+    }
+
+    return <form action="" id="formInsertRooms" onSubmit={ handlesubmit}>
+        <input type="text" name="rno" id="" placeholder="room number" value={form.rno} onChange={handlerno}/>
+        <input type="number" name="rows" id="rows" placeholder="rows" value={form.rows} onChange={handlerow}/>
+        <input type="number" name="columns" id="columns" placeholder="columns" value={form.columns} onChange={handlecolumn}/>
+        <input type="number" name="strength" id="strength" placeholder="strength" value={form.strength} onChange={handlestrength} />
+        <input type="submit" value="add room" />
+    </form>
 }
 
 
@@ -41,12 +85,12 @@ const Table = ({roomList, handleDeleteRow })=>{
     </thead>
     
     <tbody>
-    { roomList.map(item =>  <tr key={item.id}> 
+    { roomList.map(item =>  <tr key={item._id}> 
     <td> {item.rno}</td>
     <td> { item.rows }</td>
     <td> {item.columns} </td>
     <td> {item.strength} </td>
-    <td> <button onClick={()=> handleDeleteRow(item.id)}> delete row</button></td>
+    <td> <button onClick={()=> handleDeleteRow(item._id)}> delete row</button></td>
 </tr>) }
     </tbody>
 </table>
