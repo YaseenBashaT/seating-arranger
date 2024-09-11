@@ -1,17 +1,41 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function BranchTable(){
-const [data, setData] = useState([
-{ id: 1, branch: 'Computer Science', year: 2023, strength: 60 },
-{ id: 2, branch: 'Electrical Engineering', year: 2022, strength: 45 },
-{ id: 3, branch: 'Mechanical Engineering', year: 2024, strength: 50 }
-]);
-
+const [data, setData] = useState([])
 const [editingId, setEditingId] = useState(null);
+// server url
+const url = "http://127.0.0.1:12435"
+
+//loading data from the server and fill the table
+
+    useEffect(()=>{ 
+        fetch(`${url}/getbranches`)
+        .then(response=> {return response.json()})
+        .then(data=> {setData(data.response)})
+        .catch(reason=>{console.log(reason)})
+    },[])
+
+// function to handle insert branch 
+function handleInsert(branch){
+    fetch(`${url}/getbranches`,{
+        method:"POST",
+        headers: {
+            'Content-type': 'application/json',
+        },
+        body: JSON.stringify(branch)})
+    .then((resp)=>{ return resp.json()})
+    .then((data)=>{setData(prev=>[...prev, data.response]);});
+}
 
 // Function to handle row deletion
 const handleDelete = (id) => {
-setData(prevData => prevData.filter(item => item.id !== id));
+    let conf = confirm("confirm to delete the branch!!")
+    if (conf){
+        fetch(`${url}/getbranches/${id}`, {method:'DELETE'})
+        .then(resp => {return resp.json})
+        .then((data) => console.log(data.response))
+        setData(item => item.filter(room => id !== room._id))
+    }
 };
 
 // Function to handle row edit
@@ -29,7 +53,8 @@ setEditingId(id);
 
 return (
 <div>
-    <h1>Data Table</h1>
+    <InsertBranchForm handleInsert={handleInsert} />
+
     <Table
     data={data}
     onDelete={handleDelete}
@@ -39,6 +64,36 @@ return (
     />
 </div>
 );
+}
+
+
+const InsertBranchForm =({handleInsert})=>{
+    const [form, setform] = useState({branch:'', strength:''})
+    const handlesubmit = (e)=>{
+        e.preventDefault();
+        if (form.branch != "" && form.year >0 &&  form.strength >0)
+        handleInsert(form);
+        else
+        alert("invalid! check the branch details")
+
+    }
+    const handlebranch = (e)=>{
+        setform(prev=> ({...prev, branch: e.target.value}))
+    }
+    const handlerow = (e)=>{
+        setform(prev=> ({...prev, year: e.target.value}))
+    }
+    const handlestrength = (e)=>{
+        setform(prev=> ({...prev, strength: e.target.value}))
+    }
+
+    return <form action="" id="formInsertRooms" onSubmit={ handlesubmit}>
+        <input type="text" name="branch" id="" placeholder="branch name" value={form.branch} onChange={handlebranch}/>
+        <input type="number" name="year" id="year" placeholder="year" value={form.year} onChange={handlerow}/>
+        <input type="number" name="strength" id="strength" placeholder="strength" value={form.strength} onChange={handlestrength} />
+        <input type="submit" value="add branch" />
+    </form>
+
 }
 const Table = ({ data, onDelete, onEdit, editingId, startEditing }) => {
     return ( <table>
@@ -103,7 +158,7 @@ return (
         ) : (
         year
         )}
-    </td>
+    </td> 
     <td>
         {isEditing ? (
         <input
@@ -116,10 +171,10 @@ return (
         )}
     </td>
     <td>
-        <button onClick={() => onDelete(item.id)}>Delete</button>
-        <button onClick={handleEditClick}>
+        <button onClick={() => onDelete(item._id)}>Delete</button>
+        {/* <button onClick={handleEditClick}>
         {isEditing ? 'Save' : 'Edit'}
-        </button>
+        </button> */}
     </td>
     </tr>
 );
@@ -167,7 +222,7 @@ const Tableme = ({branchList})=>{
             </tr>
         </thead>
         <tbody>
-            { branchList.map(item => <tr key={item.id}> 
+            { branchList.map(item => <tr key={item._id}> 
             <td> {item.branch}</td>
             <td> { item.year }</td>
             <td> {item.strength} </td>
