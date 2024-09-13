@@ -76,7 +76,7 @@ class seatarranger:
     def arrange(self):
         import random
         count = 0
-        rmss = roomsList.copy()
+        rmss = self.roomsList.copy()
         for i in self.branchList:
             while i.isleft():
                 count += 1
