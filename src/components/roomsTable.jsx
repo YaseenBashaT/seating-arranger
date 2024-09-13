@@ -4,7 +4,7 @@ import { json } from "react-router-dom"
 export default function Roomstable(){
     const [roomList, setRoomList] = useState([])
 
-    const url = "http://127.0.0.1:12435"
+    const url = "https://seating-arranger.onrender.com"
     useEffect(()=>{ 
         fetch(`${url}/getrooms`)
         .then(response=> {return response.json()})

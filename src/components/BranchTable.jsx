@@ -4,7 +4,7 @@ export default function BranchTable(){
 const [data, setData] = useState([])
 const [editingId, setEditingId] = useState(null);
 // server url
-const url = "http://127.0.0.1:12435"
+const url = "https://seating-arranger.onrender.com"
 
 //loading data from the server and fill the table
 
