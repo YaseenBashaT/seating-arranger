@@ -12,8 +12,8 @@ export default function Arrange(){
     const [attCharts, setAttCharts] = useState([])
 
     //get rooms data 
-    // const url = "https://seating-arranger.onrender.com"
-    const url = "http://127.0.0.1:12435"
+    const url = "https://seating-arranger.onrender.com"
+    // const url = "http://127.0.0.1:12435"
     useEffect(()=>{ 
         fetch(`${url}/getrooms`)
         .then(response=> {return response.json()})
