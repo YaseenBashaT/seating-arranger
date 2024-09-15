@@ -5,8 +5,9 @@ class room:
         self.row1 = strength //2
         self.row2 = strength//2
         self.dt = {'row1':[], 'row2':[]}
-        self.record = []
+        self.record = {"room":rno , "row1":[], "row2":[]}
         self.subj = {'row1':[], 'row2':[]}
+        self.rmss = 0
 
     def isEmpty(self):
         return True if self.row1 != 0 or self.row2 != 0 else False
@@ -25,18 +26,18 @@ class room:
         self.row1 = self.strength //2
         self.row2 = self.strength//2
         self.dt = {'row1':[], 'row2':[]}
-        self.record = []
+        self.record = {"room":self.rno , "row1":[], "row2":[]}
         self.subj = {'row1':[], 'row2':[]}
         
     def fill(self, std):
-            
         if self.row1 >= self.row2 and self.canFill(std, 'row1'):
             temp = min(std.strength - std.filled, self.row1)
             
             if temp != 0:
                 self.dt['row1'].append(std.branch)
                 self.subj['row1'].append(std.sub)
-                self.record.append([std.branch, "row1", (std.filled+1, std.filled+temp), std.sub, temp])
+                # self.record.append([std.branch, "row1", (std.filled+1, std.filled+temp), std.sub, temp])
+                self.record['row1'] = self.record.get('row1', []) + [ std.branch + str(x) for x in range(std.filled+1, std.filled+temp+1 )]
                 std.alloted_rooms.append({"rno":self.rno, "from":std.filled+1,"to":std.filled+temp, "row":1, "branch":std.branch}) #temp
             std.filled += temp
             self.row1 -= temp
@@ -46,7 +47,8 @@ class room:
             if temp != 0:
                 self.dt['row2'].append(std.branch)
                 self.subj['row2'].append(std.sub)
-                self.record.append([std.branch, "row2", (std.filled+1, std.filled+temp), std.sub, temp])
+                # self.record.append([std.branch, "row2", (std.filled+1, std.filled+temp), std.sub, temp])
+                self.record['row2'] = self.record.get('row2', []) + [ std.branch + str(x) for x in range(std.filled+1, std.filled+temp+1 )]
                 std.alloted_rooms.append({"rno":self.rno, "from":std.filled+1,"to":std.filled+temp, "row":2, "branch":std.branch}) #temp
             std.filled += temp
             self.row2 -= temp
@@ -62,6 +64,7 @@ class std:
         a.sub = sub
         a.alloted_rooms = []
         
+        
     def isleft(self):
         return self.filled < self.strength
     def vacentRoom(self):
@@ -72,6 +75,7 @@ class seatarranger:
     def __init__(self, roomList, branchList):
         self.roomList = roomList
         self.branchList = branchList
+        self.completed = []
 
     def arrange(self):
         import random
@@ -93,6 +97,7 @@ class seatarranger:
         self.emptyRooms()
         count = 0
         rmss = self.roomList.copy()
+        self.completed = []
         for i in self.branchList:
             while i.isleft():
                 count += 1
@@ -100,11 +105,16 @@ class seatarranger:
                     break
                 rm = random.choice(rmss)
                 if not rm.isEmpty():
+                    self.completed.append(rm)
                     rmss.remove(rm)
                     continue
                 rm.fill(i)
+        self.completed += rmss
         return [ y for x in self.branchList for y in x.alloted_rooms]
-                
+
+    def getAttChart(self):
+        return [room.record for room in self.completed]
+      
     def emptyRooms(self):
         for i in self.roomList:
             i.vacentroom()
@@ -120,4 +130,3 @@ class seatarranger:
             for j in i.alloted_rooms:
                 print(f'{i.branch}\t{j[0]}\t {i.sub}\t {j[1]}-{j[2]}\t')
             print()
-

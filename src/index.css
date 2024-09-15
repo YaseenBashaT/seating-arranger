@@ -101,3 +101,63 @@ form#formInsertRooms input:focus {
   box-shadow: 0 0 5px rgba(106, 13, 173, 0.5); /* Focus effect */
   outline: none;
 }
+
+@media screen and (min-width:500px) {
+  .chart{
+    row-gap: 0px;
+    column-gap: 40px;
+    overflow-x: scroll;
+    padding-bottom: 10px;
+    grid-auto-flow: column;
+  }
+  
+}
+.chart div{
+  display: flex;
+}
+.chart section{
+  border: 1px solid black;
+  padding: 10px;
+  min-width: 60px;
+}
+
+.selectbranches div{
+  display: flex;
+  margin: 5px;
+  padding: 5px;
+}
+
+@media print{
+  nav{
+    display: none;
+    visibility: hidden;
+  }
+  #root{
+    margin: 5px;
+    padding: 2px;
+  }
+  .selectrooms{
+    display: none;
+  }
+  .selectbranches{
+    display: none;
+  }
+  #selectroom, #selectbranch{
+    display: none;
+  }
+
+  table, td, th {
+    border: 1px solid black;
+
+  }
+  table{
+    border-collapse: collapse;
+  }
+  .chart{
+    column-gap: 5px;
+  }
+  .chart section{
+    padding: 5px 7px;
+  }
+
+}

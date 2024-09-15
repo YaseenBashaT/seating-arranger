@@ -9,9 +9,11 @@ export default function Arrange(){
     const [rooms, setRooms] = useState([])
     const [branches, setBranches] = useState([])
     const [seatingdata, setSeatingData] = useState([])
+    const [attCharts, setAttCharts] = useState([])
 
     //get rooms data 
-    const url = "https://seating-arranger.onrender.com"
+    // const url = "https://seating-arranger.onrender.com"
+    const url = "http://127.0.0.1:12435"
     useEffect(()=>{ 
         fetch(`${url}/getrooms`)
         .then(response=> {return response.json()})
@@ -38,16 +40,11 @@ export default function Arrange(){
     const handleChangeSubject = (e, branch)=>{
         const {value} = e.target;
         setBranches(prev => prev.map(item => (item._id === branch._id ? {...item, subject:value}: item)))
-        console.log(branches)
     }
 
 
     const handlesubmit =(e)=>{
         e.preventDefault()
-        let room = rooms.filter(item => item.checked == true)
-        let branch = branches.filter(item => item.checked == true)
-        console.log(room, branch)
-
             fetch(`${url}/arrangerooms`, {method:"POST",
                 headers:{
                     "Content-type":"application/json"
@@ -59,17 +56,20 @@ export default function Arrange(){
             })
             .then(resp => {return resp.json()})
             .then(data => { let jsonString = data.res;
+                console.log(data)
                 jsonString = jsonString.replace(/'/g, '"');
-                console.log(data.res);
-                console.log(typeof JSON.parse(jsonString));
-                setSeatingData(JSON.parse(jsonString))})
+                setSeatingData(JSON.parse(jsonString));
+                jsonString = data.attChart;
+                jsonString = jsonString.replace(/'/g, '"');
+                setAttCharts(JSON.parse(jsonString));
+            console.log(attCharts)})
 
     }
 
 
 
     return <>
-    <h1> select rooms </h1>
+    <h1 id="selectroom"> select rooms </h1>
 
     <div className="selectrooms">
 
@@ -92,15 +92,16 @@ export default function Arrange(){
     <button onClick={ handlesubmit}> generate seating chart</button>
 
     <SeatingChart rows = {seatingdata} />
-    
+    <AttSheets data={attCharts} />    
+    <button onClick={(e)=>{ e.preventDefault(); window.print()}}> print </button>
     </>
 }
 
 const SelectBranch =({handleChangeSubject,handleCheckedBranch,  branches})=>{
     return <>
-    <h2>select branches </h2>
+    <h1 id="selectbranch">select branches </h1>
     <div className="selectbranches">
-    {branches.map( branch => <>
+    {branches.map( branch => <div>
         <label key={branch._id}> 
             <input type="checkbox" 
             name={branch.branch} 
@@ -110,7 +111,7 @@ const SelectBranch =({handleChangeSubject,handleCheckedBranch,  branches})=>{
             {branch.branch}: 
         </label>
         <input type="text" name="subject" placeholder="subject name" value={branch.subject} onChange={(e)=> {handleChangeSubject(e, branch)}} /> <br />
-        </>)}
+        </div>)}
     </div></>
 }
 
@@ -147,4 +148,34 @@ const Chart = ({data})=>{
     </table>
     
     </>
+}
+
+const AttSheets = ({data})=>{
+    return ((data ===0)?<p> no data</p> : <>{data.map(chart => <AttSheet data ={chart} /> )}</>)
+}
+const AttSheet = ({data})=>{
+    // let maxLen = (data.row1.length >data.row2.length)? data.row1.length:data.row2.length
+    let maxLen= Math.max(data.row1.length, data.row2.length)
+    // console.log(maxLen + Array.from({length:maxLen}))
+    // return <>{
+    //     Array.from( {length:maxLen}).map((_, index)=>{
+    //         <div style="display:flex; height:300px; flex-flow:column wrap;">
+    //             <section style="widht:50px; padding:20px; border:1px solid"> {data.row1[index]} </section>
+    //             <section style="widht:50px; padding:20px; border:1px solid"> {data.row2[index]} </section>
+    //         </div>
+    //     })
+    // }</>
+    return (
+        <>
+        <h1> { data.room}</h1>
+        <div className="chart" style={ { display: "grid", gridTemplateRows:`repeat(${6}, ${50}px)`, gridAutoFlow:'column'}}>
+        <div className="chartdetails">  </div>
+          {Array.from({ length: maxLen }).map((_, index) => (
+            <div key={index}>
+              <section>{data.row1[index]}</section><section>{data.row2[index]}</section>
+            </div>
+          ))}
+        </div>
+        </>
+      );
 }

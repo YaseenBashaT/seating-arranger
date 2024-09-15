@@ -105,9 +105,9 @@ def arrangerooms():
         branches = [std(branch = x['branch'], strength=int(x['strength']) , sub= x.get('subject', random.randint(0,100))) for x in resp.get('branches',[])]
         arr = seatarranger(rooms, branches)
         response = str(arr.arr1())
+        chart = str(arr.getAttChart())
     except Exception as e:
         response = str(e)
-    return jsonify(response = "SUccess" ,res = response)
-
-
+        chart = "dont know"
+    return jsonify(response = "SUccess" ,res = response, attChart = chart)
 app.run(port = 12435, host='0.0.0.0')
