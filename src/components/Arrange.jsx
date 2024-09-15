@@ -169,7 +169,7 @@ const AttSheet = ({data})=>{
         <>
         <h1> { data.room}</h1>
         <div className="chart" style={ { display: "grid", gridTemplateRows:`repeat(${6}, ${50}px)`, gridAutoFlow:'column'}}>
-        <div className="chartdetails">  </div>
+        
           {Array.from({ length: maxLen }).map((_, index) => (
             <div key={index}>
               <section>{data.row1[index]}</section><section>{data.row2[index]}</section>
