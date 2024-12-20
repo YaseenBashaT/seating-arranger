@@ -6,7 +6,7 @@ from bson import ObjectId
 import random
 from dependencies import room, std, seatarranger
 
-uri = 'mongodb+srv://admin:9182377052@cluster0.48jda.mongodb.net/'
+uri = '---- your mongodb link -----'
 client = MongoClient(uri, server_api = ServerApi('1'))
 db = client['esp']
 

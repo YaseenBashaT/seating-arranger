@@ -4,9 +4,8 @@ import { json } from "react-router-dom"
 export default function Roomstable(){
     const [roomList, setRoomList] = useState([])
 
-    const url = "https://seating-arranger.onrender.com"
     useEffect(()=>{ 
-        fetch(`${url}/getrooms`)
+        fetch(`${process.env.API_URL}/getrooms`)
         .then(response=> {return response.json()})
         .then(data=> {console.log(data);setRoomList(data.response)})
         .catch(reason=>{console.log(reason)})

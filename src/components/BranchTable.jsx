@@ -4,12 +4,12 @@ export default function BranchTable(){
 const [data, setData] = useState([])
 const [editingId, setEditingId] = useState(null);
 // server url
-const url = "https://seating-arranger.onrender.com"
+
 
 //loading data from the server and fill the table
 
     useEffect(()=>{ 
-        fetch(`${url}/getbranches`)
+        fetch(`${process.env.API_URL}/getbranches`)
         .then(response=> {return response.json()})
         .then(data=> {setData(data.response)})
         .catch(reason=>{console.log(reason)})

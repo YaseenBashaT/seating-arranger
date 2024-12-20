@@ -15,7 +15,7 @@ export default function Arrange(){
     const url = "https://seating-arranger.onrender.com"
     // const url = "http://127.0.0.1:12435"
     useEffect(()=>{ 
-        fetch(`${url}/getrooms`)
+        fetch(`${process.env.API_URL}/getrooms`)
         .then(response=> {return response.json()})
         .then(data=> {setRooms(data.response)})
         .catch(reason=>{console.log(reason)})
