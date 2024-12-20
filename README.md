@@ -1,12 +1,12 @@
 # seating arranger
 
 ## Contents
-[Abstract](#abstract)
-[Changes to do ](#)
-[Technologies used](#technologies-used)
-[How to deploy](#how-to-deploy )
-[Project output](#project-output)
-[Featues can be added](#featues-can-be-added)
+- [Abstract](#abstract)
+- [Changes to do ](#)
+- [Technologies used](#technologies-used)
+- [How to deploy](#how-to-deploy )
+- [Project output](#project-output)
+- [Featues can be added](#featues-can-be-added)
 
 
 # Abstract
@@ -53,21 +53,21 @@ or you can also run it on web by using **netlify** and **render**
 There are mainly 4 pages in this proect
 ### Rooms page 
 here we can add and remove the rooms 
-[rooms image](/public/rooms_detils_img.png)
+![rooms image](/public/rooms_detils_img.png)
 
 ### Branches page
 here you can add the details about specific branch, like no. students, which branch, year, ect.
 
-[branches image](/public/Branch_details_img.png)
+![branches image](/public/Branch_details_img.png)
 
 ### seating arrange page
 you have to select the rooms in which you are going to conduct exam and for which branch students then it will create the seating place for those selected students
 you also add which subject exam is it, so that it will not arrange beside those who have same exam 
 
-[select branch and rooms image](/public/select_rooms_branches.png)
+![select branch and rooms image](/public/select_rooms_branches.png)
 
 final output
-[after arranging](/public/final_seating_arrangement.png)
+![after arranging](/public/final_seating_arrangement.png)
 
 ### Featues can be added
 there are few more modifications need to de done in this project like 
